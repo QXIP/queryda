@@ -1,2 +1,2 @@
 #!/bin/bash
-node src/main.js $*
+nodejs src/main.js $*
