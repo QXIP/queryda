@@ -98,7 +98,7 @@ The MailReporter sends an email to one (or multiple) given e-mail address(es). I
 You can create custom reporters by creating a new class that extends the `Reporter` class (see [ConsoleReporter](src/reporters/console.coffee) for an example).
 
 ## Credits
-Based on Coffeescript version by Rico Pfaus. All rights reserved by the respective owners.
+Based on [Coffeescript](https://github.com/ryx/elasticwatch) version by Rico Pfaus. All rights reserved by the respective owners.
 
 ## TODO
 - roadmap to *v0.1*:
