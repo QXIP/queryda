@@ -1,6 +1,6 @@
-# elasticwatch
+# elasticwatch-js
 
-Elasticwatch is a nifty tool that queries an elasticsearch database and compares the results to a given expectation. If the results don't match the expectation a reporter is notified and can perform any kind of action (e.g. heat up the coffeemaker via IFTTT before sending an email to your dev team ;-) ...).
+Elasticwatch-js is a nifty node tool that queries an elasticsearch database and compares the results to a given expectation. If the results don't match the expectation a reporter is notified and can perform any kind of action (e.g. heat up the coffeemaker via IFTTT before sending an email to your dev team ;-) ...).
 
 This allows to create intelligent alarming setups based on your ELK data, no matter if it's gathered from infrastructure monitoring, RUM data, ecommerce KPIs or anything else. No other tools needed, if set up as a cronjob.
 
@@ -25,7 +25,7 @@ curl -s -XPUT 'http://localhost:9200/monitoring/rum/6' -d '{"requestTime":43,"re
 
 ... and run elasticwatch with the following commandline (or using the *example.json* from the `jobs` dir). *NOTE: make sure you have an elasticsearch instance up and running at the given URL*
 ```
-bin/elasticwatch --elasticsearch='{"host":"localhost","port":9200,"index":"monitoring","type":"rum"}' --query='{"filtered":{"query":{"query_string":{"query":"_exists_:renderTime","analyze_wildcard":true}},"filter":{"range":{"timestamp":{"gt":"2015-03-06T12:00:00","lt":"2015-03-07T00:00:00"}}}}}' --validator='{"range":{"fieldName":"renderTime","min":0,"max":500,"tolerance":4}}' --reporters='{"console":{}}' --debug --name test
+bin/elasticwatch --elasticsearch='{"host":"localhost","port":9200,"index":"monitoring","type":"rum"}' --query='{"filtered":{"query":{"query_string":{"query":"_exists_:renderTime","analyze_wildcard":true}},"filter":{"range":{"timestamp":{"gt":"2015-03-06T12:00:00","lt":"2015-03-07T00:00:00"}}}}}' --validator='{"fieldName":"renderTime","min":0,"max":500,"tolerance":4}' --reporters='{"console":{}}' --debug --name test
 ```
 
 ## Configuration
@@ -91,6 +91,9 @@ The MailReporter sends an email to one (or multiple) given e-mail address(es). I
 
 ### Custom reporters
 You can create custom reporters by creating a new class that extends the `Reporter` class (see [ConsoleReporter](src/reporters/console.coffee) for an example).
+
+## Credits
+Based on Coffeescript version by Rico Pfaus. All rights reserved by the respective owners.
 
 ## TODO
 - roadmap to *v0.1*:
