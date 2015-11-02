@@ -151,11 +151,17 @@
 
         if (numHits === 0) {
           result = rc.NoResults;
-        } else if (!this.validator[0].validate(data)) {
-          result = rc.ValidationFailed;
+	  return false;
         } else {
-          result = rc.Success;
-        }
+		this.validator.forEach(function(validator){
+			if (!validator.validate(data)) {
+		          result = rc.ValidationFailed;
+			  return;
+		        } else {
+		          result = rc.Success;
+		        }
+		});
+	}
       }
       if (result === rc.Success) {
         return true;
