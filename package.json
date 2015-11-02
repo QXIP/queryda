@@ -1,0 +1,37 @@
+{
+  "name": "elasticwatch",
+  "version": "0.0.4",
+  "description": "watch/report/alarm tool for elasticsearch",
+  "author": "Lorenzo Mangani <lorenzo.mangani@gmail.com>",
+  "keywords": [
+    "elasticsearch",
+    "alarming",
+    "alerting",
+    "monitoring",
+    "notification"
+  ],
+  "bin": {
+    "elasticwatch": "./bin/elasticwatch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lmangani/elasticwatch-js"
+  },
+  "dependencies": {
+    "url": "*",
+    "loglevel": "^1.2.0",
+    "yargs": "^3.4.5"
+  },
+  "devDependencies": {
+    "chai": "^2.1.1",
+    "mocha": "^2.2.1",
+    "mockery": "^1.4.0"
+  },
+  "engines": {
+    "node": ">=0.8.0"
+  },
+  "license": "MIT",
+  "scripts": {
+    "test": "mocha --compilers coffee:coffee-script/register"
+  }
+}
