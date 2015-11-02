@@ -29,7 +29,7 @@ curl -s -XPUT 'http://localhost:9200/monitoring/rum/6' -d '{"requestTime":43,"re
 bin/elasticwatch \
 --elasticsearch='{"host":"localhost","port":9200,"index":"monitoring","type":"rum"}' \
 --query='{"filtered":{"query":{"query_string":{"query":"_exists_:renderTime","analyze_wildcard":true}},"filter":{"range":{"timestamp":{"gt":"2015-03-06T12:00:00","lt":"2015-03-07T00:00:00"}}}}}' \
---validator='{"fieldName":"renderTime","min":0,"max":500,"tolerance":4}' \
+--validators='{"range":{"fieldName":"renderTime","min":0,"max":500,"tolerance":4}}' \
 --reporters='{"console":{}}' --debug --name test
 ```
 
@@ -51,12 +51,8 @@ Settings for elasticsearch, expects the following madatory fields:
 ### *query* (required)
 An elasticsearch query statement. Refer to the [elasticsearch documentation](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current) for details about syntax and features. Should return a result set that contains the supplied *fieldName* to match against.
 
-### *validator* (required)
-Validator settings, expects the following mandatory fields:
-- *fieldName*: The name of the field in the result set, that is compared against the defined expectation.
-- *min*: The minimum allowed value for all values within the query. If a series of values (as defined through the *tolerance* property) in the result is lower than this minimum an alarm is raised and reported.
-- *max*: The maxmimum allowed value for all values within the query. If a series of values (as defined through the *tolerance* property) in the result exceed this maximum an alarm is raised and reported.
-- *tolerance*: If a queried series of values exceeds either *min* or *max* for *tolerance*+1 times an alarm is raised.
+### *validators (required)*
+Validator(s) to compare the query results against. Expects an object with key/value pairs where *key* ist the name of the validator and *value* is the validator-specific configuration. See [Validators](#validators) for more details.
 
 ### *reporters (required)*
 Reporter(s) to notify about alarms. Expects an object with key/value pairs where *key* ist the name of the reporter and *value* is the reporter-specific configuration. See [Reporters](#reporters) for more details.
@@ -67,7 +63,28 @@ Name of JSON file to read config from. Expects main options as top-level propert
 ## Validators
 A Validator takes a query result received from elasticsearch and compares it against a given expectation. This can be as easy as checking if a value equals a given constant or as complex as checking the average of a series of values against an allowed range with an explicit threshold.
 
-(TODO:) Validators can be dynamically instantiated und created (just like reporters. To implement new Validators you can simply create a new subclass of the abstract Validator base class.
+### Available Validators
+#### Range
+The Range Validator checks a given Field for mix/max boundaries with tolerance factor. 
+
+Expects the following mandatory fields:
+- *fieldName*: The name of the field in the result set, that is compared against the defined expectation.
+- *min*: The minimum allowed value for all values within the query. If a series of values (as defined through the *tolerance* property) in the result is lower than this minimum an alarm is raised and reported.
+- *max*: The maxmimum allowed value for all values within the query. If a series of values (as defined through the *tolerance* property) in the result exceed this maximum an alarm is raised and reported.
+- *tolerance*: If a queried series of values exceeds either *min* or *max* for *tolerance*+1 times an alarm is raised.
+
+##### Range Example
+```javascript
+ "validators": {
+    "range": {
+	    "fieldName": "value",
+	    "min": 0,
+	    "max": 500,
+	    "tolerance": 4
+    }
+  },
+
+```
 
 ## Reporters
 By default elasticwatch does nothing more than executing its configured jobs, raising alarms if expectations aren't met. If you want to perform any action in such an alarm case, you have to define a reporter.
