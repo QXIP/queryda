@@ -9,8 +9,8 @@ This allows to create intelligent alarming setups based on your Elasticsearch da
 
 First clone the git repository and install the dependencies.
 ```
-git clone https://github.com/ryx/elasticwatch.git
-cd elasticwatch
+git clone https://github.com/lmangani/elasticwatch-js.git
+cd elasticwatch-js
 npm install
 ```
 
@@ -101,7 +101,8 @@ Expects the following mandatory field:
   },
 
 ```
-
+### Custom validators
+You can create custom validators by creating a new class that extends the `Validator` class (see [RangeValidator](src/validators/range.js) for an example).
 
 ## Reporters
 By default elasticwatch does nothing more than executing its configured jobs, raising alarms if expectations aren't met. If you want to perform any action in such an alarm case, you have to define a reporter.
@@ -129,15 +130,8 @@ The MailReporter sends an email to one (or multiple) given e-mail address(es). I
 ```
 
 ### Custom reporters
-You can create custom reporters by creating a new class that extends the `Reporter` class (see [ConsoleReporter](src/reporters/console.coffee) for an example).
+You can create custom reporters by creating a new class that extends the `Reporter` class (see [ConsoleReporter](src/reporters/console.js) for an example).
 
 ## Credits
 Based on [Coffeescript](https://github.com/ryx/elasticwatch) version by Rico Pfaus. All rights reserved by the respective owners.
 
-## TODO
-- roadmap to *v0.1*:
-  - use dynamic configuration for validator so we can have multiple validator types (similar to reporter approach)
-  - fix App tests
-  - improve tests for app-level error cases (404, ES timeout, Unhandled)
-  - jobs -> examples
-  - use coffee only as devDependency (to allow npm package)
