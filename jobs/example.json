@@ -25,11 +25,13 @@
       }
     }
   },
-  "validator": {
-    "fieldName": "renderTime",
-    "min": 0,
-    "max": 500,
-    "tolerance": 4
+  "validators": {
+    "range" : {
+	    "fieldName": "renderTime",
+	    "min": 0,
+	    "max": 500,
+	    "tolerance": 4
+    }
   },
   "reporters": {
     "console": {}
