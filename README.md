@@ -85,6 +85,23 @@ Expects the following mandatory fields:
   },
 
 ```
+#### Anomalies
+The Anomalies Validator can determine clusters of data and then also identify values which
+do not identify with any derived cluster and delcare them outliers.
+
+Expects the following mandatory field:
+- *fieldName*: The name of the field in the result set, that is tested for series anomalies.
+
+##### Anomalies Example
+```javascript
+ "validators": {
+    "anomalies": {
+	    "fieldName": "value"
+    }
+  },
+
+```
+
 
 ## Reporters
 By default elasticwatch does nothing more than executing its configured jobs, raising alarms if expectations aren't met. If you want to perform any action in such an alarm case, you have to define a reporter.
