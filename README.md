@@ -1,4 +1,4 @@
-<img src="http://i.imgur.com/Od8dRGq.gif" width=270>
+<img src="http://i.imgur.com/Od8dRGq.gif" width=260>
 # elasticwatch-js
 
 Elasticwatch-js is a nifty node tool that queries an elasticsearch database and compares the results to a given expectation. If the results don't match the expectation a reporter is notified and can perform any kind of action (e.g. heat up the coffeemaker via IFTTT before sending an email to your dev team).
