@@ -8,7 +8,7 @@
 
   yargs = require("yargs");
 
-  argv = yargs.usage("Usage: $0 --name=[name] --[elasticsearch,query,reporters,validator]={...} or --config=[config]").epilog("elasticwatch by Rico Pfaus | (c) 2015 | <ricopfaus@gmail.com>").version(function() {
+  argv = yargs.usage("Usage: $0 --name=[name] --[elasticsearch,query,reporters,validator]={...} or --config=[config]").epilog("elasticwatch by Rico Pfaus | (c) 2015 | <ricopfaus@gmail.com>\nelasticwatch-js by Lorenzo Mangani | (c) 2015 QXIP BV | <info@qxip.net>").version(function() {
     return require("../package.json").version;
   }).option("name", {
     describe: "identifier for this Job (will be included in reports)",
