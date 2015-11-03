@@ -101,7 +101,9 @@ Expects the following mandatory field:
 ```javascript
  "validators": {
     "anomalies": {
-	    "fieldName": "value"
+	    "fieldName": "value",
+	    "tolerance": 0
+
     }
   },
 
