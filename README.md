@@ -1,9 +1,9 @@
 <img src="http://i.imgur.com/Od8dRGq.gif" width=260>
 # elasticwatch-js
 
-Elasticwatch-js is a nifty node tool that queries an elasticsearch database and compares the results to a given expectation. If the results don't match the expectation a reporter is notified and can perform any kind of action (e.g. heat up the coffeemaker via IFTTT before sending an email to your dev team).
+Elasticwatch-js is a nifty node tool or "watcher" that queries an elasticsearch database and compares the results to one or more given expectations via a pipe of validators. If the results don't match the expectations a reporter is notified and can perform any kind of action (e.g. heat up the coffeemaker via IFTTT before sending an email to your dev team).
 
-This allows to create intelligent alarming setups based on your Elasticsearch data, no matter if it's gathered from infrastructure monitoring, RUM data, ecommerce KPIs or anything else. No other tools needed, if set up as a cronjob.
+This allows to create intelligent alarming setups based on your Elasticsearch data and series, no matter if it's gathered from infrastructure monitoring, RUM data, ecommerce KPIs or anything else. No other tools needed, if set up as a cronjob.
 
 ## Getting started
 
@@ -31,6 +31,11 @@ bin/elasticwatch \
 --query='{"filtered":{"query":{"query_string":{"query":"_exists_:renderTime","analyze_wildcard":true}},"filter":{"range":{"timestamp":{"gt":"2015-03-06T12:00:00","lt":"2015-03-07T00:00:00"}}}}}' \
 --validators='{"range":{"fieldName":"renderTime","min":0,"max":500,"tolerance":4}}' \
 --reporters='{"console":{}}' --debug --name test
+```
+
+elasticwatch-js can also be executed using a self-contained configuration file (see [example.json](jobs/example.json))
+```
+bin/elasticwatch --configfile /path/to/watcherjob.json
 ```
 
 ## Configuration
