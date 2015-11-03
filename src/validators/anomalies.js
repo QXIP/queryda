@@ -24,11 +24,17 @@
      * Create a new AnomaliesValidator with the given options.
      * @constructor
      * @param  fieldName {String}  name of the result field (key) to use as comaprison value
+     * @param  tolerance {int}     maximum allowed number of consecutive values that do not match the expectation
      */
 
     function AnomaliesValidator(config) {
       this.config = config != null ? config : {};
       this.fieldName = this.config.fieldName;
+      if (!this.config.tolerance) {
+		this.tolerance = 0; 
+      } else { 
+	     	this.tolerance = this.config.tolerance;
+      }
       this.validate = bind(this.validate, this);
       this.fails = [];
       if (!this.fieldName || this.min === null || this.max === null || this.tolerance === null) {
@@ -85,7 +91,7 @@
 	var nameList = {};
 	var out = [];
 	for(var i in obj){
-		nameList[i] = "outlier";
+		nameList[i] = "outlier_"+obj[i];
 		sortList.push(obj[i]);
 		if(hashList[obj[i]] == undefined){
 			hashList[obj[i]] = [i];
@@ -154,8 +160,8 @@
           if ( Object.getOwnPropertyNames(res.outliers).length === 0 ) {
             this.fails.length = 0;
           } else {
-            log.debug("AnomaliesValidator.validate: anomalies found!");
-            this.fails.push(res.outliers);
+		// Iterate Outliers
+		for ( var p in res.outliers ) { this.fails.push(series[p]); }
           }
           if (this.fails.length > this.tolerance) {
             log.debug("AnomaliesValidator.validate: anomalies found in series!");
@@ -176,7 +182,7 @@
      */
 
     AnomaliesValidator.prototype.getMessage = function() {
-      return "'" + this.fieldName + "' series contains anomalies! '";
+      return "'" + this.fieldName + "' series contains '" + this.fails.length + "' anomalies! [" + this.fails + "]";
     };
 
     return AnomaliesValidator;

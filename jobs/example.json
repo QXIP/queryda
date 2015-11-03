@@ -31,6 +31,10 @@
 	    "min": 0,
 	    "max": 500,
 	    "tolerance": 4
+    },
+    "anomalies" : {
+	    "fieldName": "renderTime",
+	    "tolerance": 2
     }
   },
   "reporters": {

@@ -142,6 +142,7 @@
     Worker.prototype.handleResponseData = function(data) {
       var numHits, rc, result;
       result = null;
+      var alarms = [];
       rc = Worker.ResultCodes;
       if (!data || typeof data.hits === "undefined") {
         result = rc.InvalidResponse;
@@ -149,27 +150,36 @@
         numHits = data.hits.total;
         log.debug("Worker(" + this.id + ").onResponse: query returned " + numHits + " hits");
 
+
         if (numHits === 0) {
           result = rc.NoResults;
 	  return false;
         } else {
-		this.validator.forEach(function(validator){
+		// Iterate Validators
+		this.validator.forEach(function(validator, i){
 			if (!validator.validate(data)) {
-		          result = rc.ValidationFailed;
-			  return;
+		          	result = rc.ValidationFailed;
+				alarms.push(i);
+			        // return false;
 		        } else {
 		          result = rc.Success;
 		        }
 		});
+
+	      if (result === rc.Success) {
+	        return true;
+	      } else {
+
+		// Iterate Alarms
+		for (idx = 0; idx < alarms.length; ++idx) {
+		        this.raiseAlarm(result.label + ": " + (this.validator[idx].getMessage()));
+		}
+	        process.exitCode = result.code;
+	        return false;
+	      }
 	}
       }
-      if (result === rc.Success) {
-        return true;
-      } else {
-        this.raiseAlarm(result.label + ": " + (this.validator.getMessage()));
-        process.exitCode = result.code;
-        return false;
-      }
+
     };
 
 
