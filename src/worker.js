@@ -166,7 +166,8 @@
 		        }
 		});
 
-	      if (result === rc.Success) {
+	      // if (result === rc.Success) {
+	      if (alarms.length == 0) {
 	        return true;
 	      } else {
 
@@ -175,7 +176,7 @@
 		        this.raiseAlarm(result.label + ": " + (this.validator[idx].getMessage()));
 		}
 	        process.exitCode = result.code;
-	        return false;
+	           return false;
 	      }
 	}
       }
