@@ -72,7 +72,6 @@
       if( url.parse(host).auth  ) {
 		this.auth = url.parse(host).auth;
 		this.host = url.parse(host).host;
-		console.log( this.host,this.auth);
       } else {
 	        this.host = host;
       }
