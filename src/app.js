@@ -26,13 +26,14 @@
       this.config = config1;
       this.handleAlarm = bind(this.handleAlarm, this);
       log.debug("App.constructor: creating app", this.config);
-      ref = ["name", "elasticsearch", "query", "reporters", "validators"];
+      ref = ["name", "elasticsearch", "query", "aggs", "reporters", "validators"];
       for (j = 0, len = ref.length; j < len; j++) {
         s = ref[j];
         if (!this.config[s]) {
           throw new Error("App.constructor: config." + s + " missing");
         }
       }
+
       this.reporters = [];
       ref1 = this.config.reporters;
       for (reporterName in ref1) {
@@ -60,7 +61,7 @@
       log.debug("App.constructor: creating worker");
 */
 
-      this.worker = App.createWorker(this.config.name, this.config.elasticsearch, this.config.query, this.validators);
+      this.worker = App.createWorker(this.config.name, this.config.elasticsearch, this.config.query, this.config.aggs, this.validators);
       if (this.worker) {
         this.worker.on("alarm", this.handleAlarm);
         this.worker.start();
@@ -79,17 +80,18 @@
      * @param  name                  {String}    worker name/id
      * @param  elasticsearchConfig   {Object}    elasticsearch config (host/port/index/type)
      * @param  query                 {Object}    elasticsearch query object
+     * @param  aggs                  {Object}    elasticsearch aggs object
      * @param  validator             {Validator} validator object to be passed to Worker
      */
 
-    App.createWorker = function(name, elasticsearchConfig, query, validator) {
+    App.createWorker = function(name, elasticsearchConfig, query, aggs, validator) {
       var e, error;
-      if (!name || !elasticsearchConfig || !query || !validator) {
+      if (!name || !elasticsearchConfig || !query || !aggs || !validator) {
         log.error("App.createWorker: invalid number of options");
         return null;
       }
       try {
-        return new Worker(name, elasticsearchConfig.host, elasticsearchConfig.port, "/" + elasticsearchConfig.index + "/" + elasticsearchConfig.type, query, validator);
+        return new Worker(name, elasticsearchConfig.host, elasticsearchConfig.port, "/" + elasticsearchConfig.index + "/" + elasticsearchConfig.type, query, aggs, validator);
       } catch (error) {
         e = error;
         log.error("ERROR: worker creation failed: " + e.message);

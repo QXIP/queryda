@@ -25,6 +25,7 @@
       }
     }
   },
+  "aggs": {},
   "validators": {
     "range" : {
 	    "fieldName": "renderTime",

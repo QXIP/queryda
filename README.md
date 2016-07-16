@@ -29,6 +29,7 @@ curl -s -XPUT 'http://localhost:9200/monitoring/rum/6' -d '{"requestTime":43,"re
 bin/elasticwatch \
 --elasticsearch='{"host":"localhost","port":9200,"index":"monitoring","type":"rum"}' \
 --query='{"filtered":{"query":{"query_string":{"query":"_exists_:renderTime","analyze_wildcard":true}},"filter":{"range":{"timestamp":{"gt":"2015-03-06T12:00:00","lt":"2015-03-07T00:00:00"}}}}}' \
+--aggs='{}' \
 --validators='{"range":{"fieldName":"renderTime","min":0,"max":500,"tolerance":4}}' \
 --reporters='{"console":{}}' --debug --name test
 ```
@@ -55,6 +56,9 @@ Settings for elasticsearch, expects the following madatory fields:
 
 ### *query* (required)
 An elasticsearch query statement. Refer to the [elasticsearch documentation](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current) for details about syntax and features. Should return a result set that contains the supplied *fieldName* to match against.
+
+### *aggs* (required)
+An elasticsearch aggregation statement. Refer to the [elasticsearch documentation](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current) for details about syntax and features. Should return a result set that contains the supplied *fieldName* to match against.
 
 ### *validators (required)*
 Validator(s) to compare the query results against. Expects an object with key/value pairs where *key* ist the name of the validator and *value* is the validator-specific configuration. See [Validators](#validators) for more details.

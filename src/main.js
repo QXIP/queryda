@@ -7,7 +7,7 @@
 
   yargs = require("yargs");
 
-  argv = yargs.usage("Usage: $0 --name=[name] --[elasticsearch,query,reporters,validators]={...} or --config=[config]").epilog("elasticwatch by Rico Pfaus | (c) 2015 | <ricopfaus@gmail.com>\nelasticwatch-js by Lorenzo Mangani | (c) 2015 QXIP BV | <info@qxip.net>").version(function() {
+  argv = yargs.usage("Usage: $0 --name=[name] --[elasticsearch,query,aggs,reporters,validators]={...} or --config=[config]").epilog("elasticwatch by Rico Pfaus | (c) 2015 | <ricopfaus@gmail.com>\nelasticwatch-js by Lorenzo Mangani | (c) 2015 QXIP BV | <info@qxip.net>").version(function() {
     return require("../package.json").version;
   }).option("name", {
     describe: "identifier for this Job (will be included in reports)",
@@ -18,6 +18,9 @@
   }).option("query", {
     describe: "elasticsearch query (e.g. {\"match\":\"*\"})",
     type: "string"
+  }).option("aggs", {
+    describe: "elasticsearch aggs query (e.g. {\"aggs\":\"*\"})",
+    type: "string"
   }).option("reporters", {
     describe: "reporters to notify about alarms (as hash with name:config)",
     type: "string"
@@ -25,7 +28,7 @@
     describe: "validators for checking expectation (as hash with name:config)",
     type: "string"
   }).option("configfile", {
-    describe: "optional file with JSON data that supplies all options [elasticsearch|query|validators|reporters]",
+    describe: "optional file with JSON data that supplies all options [elasticsearch|query|aggs|validators|reporters]",
     type: "string"
   }).option("debug", {
     describe: "show additional output (for debugging only)",
@@ -41,7 +44,7 @@
       process.exitCode = 10;
     }
   } else {
-    if (!(argv.name || argv.elasticsearch || argv.query || argv.reporters || argv.validators)) {
+    if (!(argv.name || argv.elasticsearch || argv.query || argv.aggs || argv.reporters || argv.validators)) {
       log.error(yargs.help());
       process.exitCode = 11;
     } else {
@@ -50,6 +53,7 @@
           name: argv.name,
           elasticsearch: JSON.parse(argv.elasticsearch),
           query: JSON.parse(argv.query),
+          aggs: argv.aggs ? JSON.parse(argv.aggs) : "",
           validators: JSON.parse(argv.validators),
           reporters: JSON.parse(argv.reporters)
         };

@@ -64,10 +64,11 @@
      * @param  port      {String}  elasticsearch port to connect to
      * @param  path      {String}  elasticsearch path (in form /{index}/{type})
      * @param  query     {Object}  valid elasticsearch query
+     * @param  aggs      {Object}  valid elasticsearch aggs
      * @param  validator {ResultValidator} a validator object that takes the response and compares it against a given expectation
      */
 
-    function Worker(id, host, port, path, query, validator) {
+    function Worker(id, host, port, path, query, aggs, validator) {
 
       if( url.parse(host).auth  ) {
 		this.auth = url.parse(host).auth;
@@ -80,12 +81,13 @@
       this.port = port;
       this.path = path;
       this.query = query;
+      this.aggs = aggs;
       this.validator = validator;
       this.onError = bind(this.onError, this);
       this.onResponse = bind(this.onResponse, this);
       this.raiseAlarm = bind(this.raiseAlarm, this);
       this.start = bind(this.start, this);
-      if (!this.id || !this.host || !this.port || !this.path || !this.query || !this.validator) {
+      if (!this.id || !this.host || !this.port || !this.path || !this.query || !this.aggs || !this.validator) {
         throw new Error("Worker.constructor: invalid number of options received: " + (JSON.stringify(arguments)));
       }
     }
@@ -100,7 +102,8 @@
     Worker.prototype.start = function() {
       var data, e, error1;
       data = JSON.stringify({
-        query: this.query
+        query: this.query,
+	aggs: this.aggs
       });
       this.options = {
         host: this.host,
