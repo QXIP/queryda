@@ -1,0 +1,40 @@
+{
+  "name": "SimpleJob-5m",
+  "info": "This job simply queries some values and compares them to a given min and max range",
+  "elasticsearch": {
+    "host": "localhost",
+    "port": "9200",
+    "index": "mos-*",
+    "type": "mos"
+  },
+  "query": {
+    "filtered": {
+      "query": {
+        "query_string": {
+          "query": "mos:*",
+          "analyze_wildcard": true
+        }
+      },
+      "filter": {
+        "range" : {
+          "@timestamp" : {
+            "gt" : "now-5m",
+            "lt" : "now"
+          }
+        }
+      }
+    }
+  },
+  "aggs": {},
+  "validators": {
+    "range" : {
+	    "fieldName": "mos",
+	    "min": 3,
+	    "max": 5,
+	    "tolerance": 1
+    }
+  },
+  "reporters": {
+    "console": {}
+  }
+}
