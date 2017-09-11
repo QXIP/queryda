@@ -101,10 +101,11 @@
 
     Worker.prototype.start = function() {
       var data, e, error1;
-      data = JSON.stringify({
+      data = {
         query: this.query,
-	aggs: this.aggs
-      });
+      };
+      if (Object.keys(this.aggs).length) data.aggs = this.aggs;
+      data = JSON.stringify(data);
       this.options = {
         host: this.host,
         port: this.port,
