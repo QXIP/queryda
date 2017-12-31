@@ -1,10 +1,11 @@
 (function() {
-  var App, Worker, log,
+  var App, Worker, cqlWorker, log,
     bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
   log = require("loglevel");
 
   Worker = require("./workers/elastic.js");
+  cqlWorker = require("./workers/cassandra.js");
 
   /**
    * The main application logic and entry point. Reads args, sets things up,
@@ -22,17 +23,10 @@
      * @param  config  {Object}  object with configuration options (name, elasticsearch, query, reporter(s) and validator(s) )
      */
     function App(config1) {
-      var cfg, j, len, ref, ref1, reporter, reporterName, s;
+      var cfg, j, len, ref, ref1, reporter, reporterName, s, ValidatorName, validator;
       this.config = config1;
       this.handleAlarm = bind(this.handleAlarm, this);
       log.debug("App.constructor: creating app", this.config);
-      ref = ["name", "elasticsearch", "query", "aggs", "reporters", "validators"];
-      for (j = 0, len = ref.length; j < len; j++) {
-        s = ref[j];
-        if (!this.config[s]) {
-          throw new Error("App.constructor: config." + s + " missing");
-        }
-      }
 
       this.reporters = [];
       ref1 = this.config.reporters;
@@ -47,7 +41,7 @@
 
       this.validators = [];
       ref1 = this.config.validators;
-      for (validatorName in ref1) {
+      for (var validatorName in ref1) {
         cfg = ref1[validatorName];
         log.debug("App.constructor: creating validator '" + validatorName + "'");
         validator = App.createValidator(validatorName, cfg);
@@ -56,26 +50,49 @@
         }
       }
 
-/*
-      this.validator = App.createValidator("validator", this.config.validator);
-      log.debug("App.constructor: creating worker");
-*/
 
-      this.worker = App.createWorker(this.config.name, this.config.elasticsearch, this.config.query, this.config.aggs, this.validators);
-      if (this.worker) {
-        this.worker.on("alarm", this.handleAlarm);
-        this.worker.start();
+      if(config.type === "cql") {
+	      ref = ["name", "cassandra", "query", "params", "reporters", "validators"];
+	      for (j = 0, len = ref.length; j < len; j++) {
+	        s = ref[j];
+	        if (!this.config[s]) {
+	          throw new Error("App.constructor: CQL config." + s + " missing");
+	        }
+	      }
+	      this.worker = App.createCqlWorker(this.config.name, this.config.cassandra, this.config.query, this.config.params, this.validators);
+	      if (this.worker) {
+	        this.worker.on("alarm", this.handleAlarm);
+	        this.worker.start();
+	      } else {
+	        throw new Error("App.constructor: CQL worker creation failed");
+	      }
+
+
       } else {
-        throw new Error("App.constructor: worker creation failed");
+	      ref = ["name", "elasticsearch", "query", "aggs", "reporters", "validators"];
+	      for (j = 0, len = ref.length; j < len; j++) {
+	        s = ref[j];
+	        if (!this.config[s]) {
+	          throw new Error("App.constructor: ES config." + s + " missing");
+	        }
+	      }
+	      this.worker = App.createElasticWorker(this.config.name, this.config.elasticsearch, this.config.query, this.config.aggs, this.validators);
+	      if (this.worker) {
+	        this.worker.on("alarm", this.handleAlarm);
+	        this.worker.start();
+	      } else {
+	        throw new Error("App.constructor: Elastic worker creation failed");
+	      }
+
       }
 
     }
 
 
     /**
-     * Instantiate Worker according to a given configuration.
+     * Instantiate Elastic Worker according to a given configuration.
      *
-     * @method createWorker
+     * @method createElasticWorker
      * @static
      * @param  name                  {String}    worker name/id
      * @param  elasticsearchConfig   {Object}    elasticsearch config (host/port/index/type)
@@ -84,14 +101,42 @@
      * @param  validator             {Validator} validator object to be passed to Worker
      */
 
-    App.createWorker = function(name, elasticsearchConfig, query, aggs, validator) {
+    App.createElasticWorker = function(name, elasticsearchConfig, query, aggs, validator) {
       var e, error;
       if (!name || !elasticsearchConfig || !query || !aggs || !validator) {
-        log.error("App.createWorker: invalid number of options");
+        log.error("App.createElasticWorker: invalid number of options");
         return null;
       }
       try {
         return new Worker(name, elasticsearchConfig.host, elasticsearchConfig.port, "/" + elasticsearchConfig.index + "/" + elasticsearchConfig.type, query, aggs, validator);
+      } catch (error) {
+        e = error;
+        log.error("ERROR: worker creation failed: " + e.message);
+        return null;
+      }
+    };
+
+
+    /**
+     * Instantiate CQL Worker according to a given configuration.
+     *
+     * @method createCqlWorker
+     * @static
+     * @param  name                  {String}    worker name/id
+     * @param  cassandraConfig       {Object}    elasticsearch config (host/keyspace)
+     * @param  query                 {Object}    elasticsearch query object
+     * @param  params                {Object}    elasticsearch params object
+     * @param  validator             {Validator} validator object to be passed to Worker
+     */
+
+    App.createCqlWorker = function(name, cassandraConfig, query, params, validator) {
+      var e, error;
+      if (!name || !cassandraConfig || !query || !validator) {
+        log.error("App.createCqlWorker: invalid number of options");
+        return null;
+      }
+      try {
+        return new cqlWorker(name, cassandraConfig.host, cassandraConfig.keyspace, query, params, validator);
       } catch (error) {
         e = error;
         log.error("ERROR: worker creation failed: " + e.message);
