@@ -1,6 +1,6 @@
 {
   "name": "elasticwatch",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "watch/report/alert tool for elasticsearch",
   "author": "Lorenzo Mangani <lorenzo.mangani@gmail.com>",
   "keywords": [
