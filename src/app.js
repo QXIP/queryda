@@ -4,7 +4,7 @@
 
   log = require("loglevel");
 
-  Worker = require("./worker");
+  Worker = require("./workers/elastic.js");
 
   /**
    * The main application logic and entry point. Reads args, sets things up,
