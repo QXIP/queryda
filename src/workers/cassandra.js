@@ -108,16 +108,16 @@
   	}.bind(this))
 	.then(function(data){
 		this.onResponse(data);
+		return true;
 	}.bind(this))
 	.catch(function(err){
 	        return log.error("Worker(" + this.id + ").start: unhandled error: " + err);
 	}.bind(this));
 	return true;
 
-     } catch(err){
-		this.onError(err);
-		return false;
-     }
+      } catch(err){
+	return log.error("Worker(" + this.id + ").start: unhandled error: " + err);
+      }
 
     };
 
@@ -203,6 +203,7 @@
        // log.debug("Worker(" + this.id + ").onResponse: response was: ", body);
          try {
               return this.handleResponseData(body.rows);
+	      return;
          } catch (error1) {
               e = error1;
               log.error("Worker(" + this.id + ").onResponse: failed to parse response data",e);

@@ -11,9 +11,9 @@
 	    "max": 600,
 	    "tolerance": 1
     },
-    "anomalies" : {
+    "anomalies": {
 	    "fieldName": "value",
-	    "tolerance": 2
+	    "tolerance": 0
     }
   },
   "reporters": {

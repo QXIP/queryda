@@ -168,8 +168,7 @@
             log.debug("AnomaliesValidator.validate: anomalies found in series!");
             return false;
           }
-	  return;
-
+	return;
       }
       return true;
     };
