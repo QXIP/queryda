@@ -1,10 +1,12 @@
 {
   "name": "elasticwatch",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "watch/report/alert tool for elasticsearch",
   "author": "Lorenzo Mangani <lorenzo.mangani@gmail.com>",
   "keywords": [
     "elasticsearch",
+    "cassandra",
+    "elassandra",
     "alarming",
     "alerting",
     "monitoring",
@@ -33,6 +35,6 @@
   },
   "license": "MIT",
   "scripts": {
-    "test": "mocha --compilers coffee:coffee-script/register"
+    "test": "./test.sh"
   }
 }
