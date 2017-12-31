@@ -45,8 +45,6 @@ Elasticwatch can be configured either via commandline or using a JSON file (supp
 
 The following options are currently available:
 
-## Elasticsearch
-
 ### *name (required)*
 A name of your choice to identify this job. This will be used by the reporters to identitfy this individual call.
 
