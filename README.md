@@ -2,9 +2,9 @@
 
 # ElasticWatch-js <img src="http://imgur.com/eLDoOKY.png"/> 
 
-Elasticwatch-js is a nifty node tool or "watcher" that queries an elasticsearch database and compares the results to one or more given expectations via a pipe of validators. If the results don't match the expectations a reporter is notified and can perform any kind of action (e.g. heat up the coffeemaker via IFTTT before sending an email to your dev team).
+Elasticwatch-js is a nifty node tool acting as a "watcher" for queries to elasticsearch (or cassandra) datasets, comparing results to one or more given expectations via a pipe of validators. If the results don't match the expectations a reporter is notified and can perform any kind of action _(e.g. heat up the coffeemaker via IFTTT before sending an email to your dev team)_.
 
-This allows to create intelligent alarming setups based on your Elasticsearch data and series, no matter if it's gathered from infrastructure monitoring, RUM data, ecommerce KPIs or anything else. No other tools needed, if set up as a cronjob.
+This allows to create intelligent alarming setups based on your Elasticsearch or Cassandra data and series, no matter if it's gathered from infrastructure monitoring, RUM data, ecommerce KPIs or anything else. No other tools needed, if set up as a cronjob.
 
 For a natively ELK integrated and advanced alerting plarform, check out our Kibana App [SENTINL](https://github.com/sirensolutions/sentinl)
 
@@ -156,5 +156,5 @@ The MailReporter sends an email to one (or multiple) given e-mail address(es). I
 You can create custom reporters by creating a new class that extends the `Reporter` class (see [ConsoleReporter](src/reporters/console.js) for an example).
 
 ## Credits
-Based on [Coffeescript](https://github.com/ryx/elasticwatch) version by Rico Pfaus. All rights reserved by the respective owners.
+Original Fork based on [Coffeescript](https://github.com/ryx/elasticwatch) version by Rico Pfaus. All rights reserved by the respective owners.
 
