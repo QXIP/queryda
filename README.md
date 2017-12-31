@@ -23,18 +23,6 @@ cd elasticwatch-js
 npm install
 ```
 
-* Have your Elasticsearch URL/PORT/Credentials ready!
-
-### Dataset
-Once set, create some fictional data in our elasticsearch ...
-```bash
-curl -s -XPUT 'http://localhost:9200/monitoring/rum/1' -d '{"requestTime":43,"responseTime":224,"renderTime":568,"timestamp":"2015-03-06T11:47:34"}'
-curl -s -XPUT 'http://localhost:9200/monitoring/rum/2' -d '{"requestTime":49,"responseTime":312,"renderTime":619,"timestamp":"2015-03-06T12:02:34"}'
-curl -s -XPUT 'http://localhost:9200/monitoring/rum/3' -d '{"requestTime":41,"responseTime":275,"renderTime":597,"timestamp":"2015-03-06T12:17:34"}'
-curl -s -XPUT 'http://localhost:9200/monitoring/rum/4' -d '{"requestTime":42,"responseTime":301,"renderTime":542,"timestamp":"2015-03-06T12:32:34"}'
-curl -s -XPUT 'http://localhost:9200/monitoring/rum/5' -d '{"requestTime":48,"responseTime":308,"renderTime":604,"timestamp":"2015-03-06T12:47:34"}'
-curl -s -XPUT 'http://localhost:9200/monitoring/rum/6' -d '{"requestTime":43,"responseTime":256,"renderTime":531,"timestamp":"2015-03-06T13:02:34"}'
-```
 ### Alert from Command-Line
 Let's run elasticwatch with the following commandline (or using the *example.json* from the `jobs` dir). 
 ```
@@ -57,10 +45,12 @@ Elasticwatch can be configured either via commandline or using a JSON file (supp
 
 The following options are currently available:
 
+## Elasticsearch
+
 ### *name (required)*
 A name of your choice to identify this job. This will be used by the reporters to identitfy this individual call.
 
-### *elasticsearch (required)*
+### *elasticsearch (elasticsearch only, required)*
 Settings for elasticsearch, expects the following madatory fields:
 - *host*: where to find the elasticsearch host
 - *port*: which port elasticsearch is running on
@@ -70,8 +60,19 @@ Settings for elasticsearch, expects the following madatory fields:
 ### *query* (required)
 An elasticsearch query statement. Refer to the [elasticsearch documentation](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current) for details about syntax and features. Should return a result set that contains the supplied *fieldName* to match against.
 
-### *aggs* (required)
+### *aggs* (elasticsearch only, required)
 An elasticsearch aggregation statement. Refer to the [elasticsearch documentation](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current) for details about syntax and features. Should return a result set that contains the supplied *aggName* to match against.
+
+### *cassandra (cassandra only, required)*
+Settings for elasticsearch, expects the following madatory fields:
+- *host*: where to find the cassandra host
+- *keyspace*: which to use for queries
+
+### *cqlquery* (required)
+A Cassandra query statement. Refer to the [cassandra documentation](http://cassandra.apache.org/doc/latest/cql/) for details about syntax and features. Should return a result set that contains the supplied *fieldName* to match against.
+
+### *params* (cassandra only, required)
+A set of Parameters/Variable to be used by the CQL Query.
 
 ### *validators (required)*
 Validator(s) to compare the query results against. Expects an object with key/value pairs where *key* ist the name of the validator and *value* is the validator-specific configuration. See [Validators](#validators) for more details.
