@@ -1,6 +1,6 @@
 <img src="http://i.imgur.com/Od8dRGq.gif" width=260>
 
-# elasticwatch-js <img src="http://imgur.com/eLDoOKY.png"/> 
+# ElasticWatch-js <img src="http://imgur.com/eLDoOKY.png"/> 
 
 Elasticwatch-js is a nifty node tool or "watcher" that queries an elasticsearch database and compares the results to one or more given expectations via a pipe of validators. If the results don't match the expectations a reporter is notified and can perform any kind of action (e.g. heat up the coffeemaker via IFTTT before sending an email to your dev team).
 
@@ -10,14 +10,23 @@ For a natively ELK integrated and advanced alerting plarform, check out our Kiba
 
 ## Getting started
 
-First clone the git repository and install the dependencies.
+#### npm
+Install globally using npm
+```
+npm install -g elasticwatch
+```
+#### Manual
+or clone the git repository and install the dependencies.
 ```
 git clone https://github.com/lmangani/elasticwatch-js.git
 cd elasticwatch-js
 npm install
 ```
 
-Then create some data in your elasticsearch ...
+* Have your Elasticsearch URL/PORT/Credentials ready!
+
+### Dataset
+Once set, create some fictional data in our elasticsearch ...
 ```bash
 curl -s -XPUT 'http://localhost:9200/monitoring/rum/1' -d '{"requestTime":43,"responseTime":224,"renderTime":568,"timestamp":"2015-03-06T11:47:34"}'
 curl -s -XPUT 'http://localhost:9200/monitoring/rum/2' -d '{"requestTime":49,"responseTime":312,"renderTime":619,"timestamp":"2015-03-06T12:02:34"}'
@@ -26,17 +35,18 @@ curl -s -XPUT 'http://localhost:9200/monitoring/rum/4' -d '{"requestTime":42,"re
 curl -s -XPUT 'http://localhost:9200/monitoring/rum/5' -d '{"requestTime":48,"responseTime":308,"renderTime":604,"timestamp":"2015-03-06T12:47:34"}'
 curl -s -XPUT 'http://localhost:9200/monitoring/rum/6' -d '{"requestTime":43,"responseTime":256,"renderTime":531,"timestamp":"2015-03-06T13:02:34"}'
 ```
-
-... and run elasticwatch with the following commandline (or using the *example.json* from the `jobs` dir). *NOTE: make sure you have an elasticsearch instance up and running at the given URL*
+### Alert from Command-Line
+Let's run elasticwatch with the following commandline (or using the *example.json* from the `jobs` dir). 
 ```
 bin/elasticwatch \
---elasticsearch='{"host":"144.76.26.215","port":29200,"index":"monitoring","type":"rum"}' \
+--elasticsearch='{"host":"localhost","port":9200,"index":"monitoring","type":"rum"}' \
 --query='{"range":{"timestamp":{"gt":"2015-03-06T12:00:00","lt":"2015-03-07T00:00:00"}}}' \
 --aggs='{}' \
 --validators='{"range":{"fieldName":"renderTime","min":0,"max":500,"tolerance":4}}' \
 --reporters='{"console":{}}' --debug --name test
 ```
 
+### Alert from Config
 elasticwatch-js can also be executed using a self-contained configuration file (see [example.json](jobs/example.json))
 ```
 bin/elasticwatch --configfile /path/to/watcherjob.json

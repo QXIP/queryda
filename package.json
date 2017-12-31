@@ -1,13 +1,14 @@
 {
   "name": "elasticwatch",
-  "version": "0.0.4",
-  "description": "watch/report/alarm tool for elasticsearch",
+  "version": "0.0.5",
+  "description": "watch/report/alert tool for elasticsearch",
   "author": "Lorenzo Mangani <lorenzo.mangani@gmail.com>",
   "keywords": [
     "elasticsearch",
     "alarming",
     "alerting",
     "monitoring",
+    "watcher",
     "notification"
   ],
   "bin": {
