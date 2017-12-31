@@ -63,23 +63,16 @@
      * @constructor
      * @param  id        {String}  identifies this individual Worker instance
      * @param  host      {String}  cassandra hostname to connect to
-     * @param  keyspace  {String}  cassandra keyspace
      * @param  cqlquery  {Object}  valid cassandra query
      * @param  params    {Object}  valid variables for query
      * @param  validator {ResultValidator} a validator object that takes the response and compares it against a given expectation
      */
 
-    function Worker(id, host, keyspace, cqlquery, params, validator) {
-
-      if( host instanceof Array  ) {
-		this.host = host;
-      } else {
-	        this.host = [ host ];
-      }
+    function Worker(id, host, cqlquery, params, validator) {
 
       this.id = id;
-      this.keyspace = keyspace;
-      this.cqlquery = query;
+      this.host = host;
+      this.cqlquery = cqlquery;
       this.params = params;
       this.validator = validator;
       this.onError = bind(this.onError, this);
@@ -87,6 +80,7 @@
       this.raiseAlarm = bind(this.raiseAlarm, this);
       this.start = bind(this.start, this);
       if (!this.id || !this.host || !this.cqlquery || !this.validator) {
+	console.log(id,host,cqlquery,params );
         throw new Error("Worker.constructor: invalid number of required options received: " + (JSON.stringify(arguments)));
       }
     }
@@ -100,11 +94,8 @@
 
     Worker.prototype.start = function() {
       var data, e, error1;
-      data = {
-        query: this.query,
-      };
       this.options = {
-        contactPoints: this.host,
+        contactPoints: [ this.host||"127.0.0.1" ],
       };
       log.debug("Worker(" + this.id + ").sendCQLRequest: connecting to cassandra at: " + this.host);
       try {
@@ -112,19 +103,20 @@
 	var client = new cassandra.Client(this.options);
 	client.connect()
   	.then(function () {
-	        log.debug("Worker(" + this.id + ").sendCQLRequest: query data is: ", this.query,this.params);
-	  	return client.execute(this.query);
-  	})
+	        log.debug("Worker(" + this.id + ").sendCQLRequest: cqlquery is: ", this.cqlquery, this.params);
+	  	return client.execute(this.cqlquery);
+  	}.bind(this))
 	.then(function(data){
 		this.onResponse(data);
-		return true;
-	})
+	}.bind(this))
 	.catch(function(err){
-		this.onError(err);
-	        return log.error("Worker(" + this.id + ").start: unhandled error: " + e.message);
-	});
+	        return log.error("Worker(" + this.id + ").start: unhandled error: " + err);
+	}.bind(this));
+	return true;
+
      } catch(err){
 		this.onError(err);
+		return false;
      }
 
     };
@@ -148,7 +140,7 @@
       if (!data || typeof data === "undefined") {
         result = rc.InvalidResponse;
       } else {
-        log.debug("Worker(" + this.id + ").onResponse: query returned " + data);
+        log.debug("Worker(" + this.id + ").onResponse: cql query returned " + data);
 
         if (data === '') {
           result = rc.NoResults;
@@ -208,13 +200,13 @@
      */
 
     Worker.prototype.onResponse = function(body) {
-       log.debug("Worker(" + _this.id + ").onResponse: response was: ", body);
+       log.debug("Worker(" + this.id + ").onResponse: response was: ", body);
          try {
               data = JSON.parse(body);
-              return _this.handleResponseData(data);
+              return this.handleResponseData(data);
          } catch (error1) {
               e = error1;
-              log.error("Worker(" + _this.id + ").onResponse: failed to parse response data");
+              log.error("Worker(" + this.id + ").onResponse: failed to parse response data");
 	      this.raiseAlarm("" + Worker.ResultCodes.NotFound.label);
 	      process.exitCode = Worker.ResultCodes.NotFound.code;
 	      this.request.end();
