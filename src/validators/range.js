@@ -56,14 +56,17 @@
         return false;
       } else {
         this.fails = [];
-	if (data.hits.hits.length == 0) {
+	if (data.hits && data.hits.hits.length == 0||data.rowsLength == 0) {
             log.debug("RangeValidator.validate: no hits for query! ");
             return false;
         }
-        ref = data.hits.hits;
+	if (data.hits && data.hits.hits) {
+		data = data.hits.hits;
+	}
+        ref = data;
         for (i = 0, len = ref.length; i < len; i++) {
           hit = ref[i];
-          val = hit._source[this.fieldName];
+          val = hit[this.fieldName] || hit._source[this.fieldName];
           log.debug("RangeValidator.validate: val " + val);
           if ((this.max && val > this.max) || (this.min && val < this.min)) {
             log.debug("RangeValidator.validate: exceeds range");

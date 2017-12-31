@@ -2,9 +2,9 @@
 
 # ElasticWatch-js <img src="http://imgur.com/eLDoOKY.png"/> 
 
-Elasticwatch-js is a nifty node tool or "watcher" that queries an elasticsearch database and compares the results to one or more given expectations via a pipe of validators. If the results don't match the expectations a reporter is notified and can perform any kind of action (e.g. heat up the coffeemaker via IFTTT before sending an email to your dev team).
+Elasticwatch-js is a nifty node tool acting as a "watcher" for queries to elasticsearch (or cassandra) datasets, comparing results to one or more given expectations via a pipe of validators. If the results don't match the expectations a reporter is notified and can perform any kind of action _(e.g. heat up the coffeemaker via IFTTT before sending an email to your dev team)_.
 
-This allows to create intelligent alarming setups based on your Elasticsearch data and series, no matter if it's gathered from infrastructure monitoring, RUM data, ecommerce KPIs or anything else. No other tools needed, if set up as a cronjob.
+This allows to create intelligent alarming setups based on your Elasticsearch or Cassandra data and series, no matter if it's gathered from infrastructure monitoring, RUM data, ecommerce KPIs or anything else. No other tools needed, if set up as a cronjob.
 
 For a natively ELK integrated and advanced alerting plarform, check out our Kibana App [SENTINL](https://github.com/sirensolutions/sentinl)
 
@@ -23,18 +23,6 @@ cd elasticwatch-js
 npm install
 ```
 
-* Have your Elasticsearch URL/PORT/Credentials ready!
-
-### Dataset
-Once set, create some fictional data in our elasticsearch ...
-```bash
-curl -s -XPUT 'http://localhost:9200/monitoring/rum/1' -d '{"requestTime":43,"responseTime":224,"renderTime":568,"timestamp":"2015-03-06T11:47:34"}'
-curl -s -XPUT 'http://localhost:9200/monitoring/rum/2' -d '{"requestTime":49,"responseTime":312,"renderTime":619,"timestamp":"2015-03-06T12:02:34"}'
-curl -s -XPUT 'http://localhost:9200/monitoring/rum/3' -d '{"requestTime":41,"responseTime":275,"renderTime":597,"timestamp":"2015-03-06T12:17:34"}'
-curl -s -XPUT 'http://localhost:9200/monitoring/rum/4' -d '{"requestTime":42,"responseTime":301,"renderTime":542,"timestamp":"2015-03-06T12:32:34"}'
-curl -s -XPUT 'http://localhost:9200/monitoring/rum/5' -d '{"requestTime":48,"responseTime":308,"renderTime":604,"timestamp":"2015-03-06T12:47:34"}'
-curl -s -XPUT 'http://localhost:9200/monitoring/rum/6' -d '{"requestTime":43,"responseTime":256,"renderTime":531,"timestamp":"2015-03-06T13:02:34"}'
-```
 ### Alert from Command-Line
 Let's run elasticwatch with the following commandline (or using the *example.json* from the `jobs` dir). 
 ```
@@ -60,7 +48,7 @@ The following options are currently available:
 ### *name (required)*
 A name of your choice to identify this job. This will be used by the reporters to identitfy this individual call.
 
-### *elasticsearch (required)*
+### *elasticsearch (elasticsearch only, required)*
 Settings for elasticsearch, expects the following madatory fields:
 - *host*: where to find the elasticsearch host
 - *port*: which port elasticsearch is running on
@@ -70,8 +58,19 @@ Settings for elasticsearch, expects the following madatory fields:
 ### *query* (required)
 An elasticsearch query statement. Refer to the [elasticsearch documentation](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current) for details about syntax and features. Should return a result set that contains the supplied *fieldName* to match against.
 
-### *aggs* (required)
+### *aggs* (elasticsearch only, required)
 An elasticsearch aggregation statement. Refer to the [elasticsearch documentation](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current) for details about syntax and features. Should return a result set that contains the supplied *aggName* to match against.
+
+### *cassandra (cassandra only, required)*
+Settings for elasticsearch, expects the following madatory fields:
+- *host*: where to find the cassandra host
+- *keyspace*: which to use for queries
+
+### *cqlquery* (required)
+A Cassandra query statement. Refer to the [cassandra documentation](http://cassandra.apache.org/doc/latest/cql/) for details about syntax and features. Should return a result set that contains the supplied *fieldName* to match against.
+
+### *params* (cassandra only, required)
+A set of Parameters/Variable to be used by the CQL Query.
 
 ### *validators (required)*
 Validator(s) to compare the query results against. Expects an object with key/value pairs where *key* ist the name of the validator and *value* is the validator-specific configuration. See [Validators](#validators) for more details.
@@ -157,5 +156,5 @@ The MailReporter sends an email to one (or multiple) given e-mail address(es). I
 You can create custom reporters by creating a new class that extends the `Reporter` class (see [ConsoleReporter](src/reporters/console.js) for an example).
 
 ## Credits
-Based on [Coffeescript](https://github.com/ryx/elasticwatch) version by Rico Pfaus. All rights reserved by the respective owners.
+Original Fork based on [Coffeescript](https://github.com/ryx/elasticwatch) version by Rico Pfaus. All rights reserved by the respective owners.
 

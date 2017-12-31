@@ -7,7 +7,7 @@
 
   yargs = require("yargs");
 
-  argv = yargs.usage("Usage: $0 --name=[name] --[elasticsearch,query,aggs,reporters,validators]={...} or --config=[config]").epilog("elasticwatch by Rico Pfaus | (c) 2015 | <ricopfaus@gmail.com>\nelasticwatch-js by Lorenzo Mangani | (c) 2015 QXIP BV | <info@qxip.net>").version(function() {
+  argv = yargs.usage("Usage: $0 --name=[name] --[elasticsearch,query,aggs,cassandra,cqlquery,params,reporters,validators]={...} or --config=[config]").epilog("elasticwatch by Rico Pfaus | (c) 2015 | <ricopfaus@gmail.com>\nelasticwatch-js by Lorenzo Mangani | (c) 2015 QXIP BV | <info@qxip.net>").version(function() {
     return require("../package.json").version;
   }).option("name", {
     describe: "identifier for this Job (will be included in reports)",
@@ -21,6 +21,17 @@
   }).option("aggs", {
     describe: "elasticsearch aggs query (e.g. {\"aggs\":\"*\"})",
     type: "string"
+
+  }).option("cassandra", {
+    describe: "object with cassandra settings [host]",
+    type: "string"
+  }).option("cqlquery", {
+    describe: "cql query",
+    type: "string"
+  }).option("params", {
+    describe: "cql params",
+    type: "string"
+
   }).option("reporters", {
     describe: "reporters to notify about alarms (as hash with name:config)",
     type: "string"
@@ -44,23 +55,41 @@
       process.exitCode = 10;
     }
   } else {
-    if (!(argv.name || argv.elasticsearch || argv.query || argv.aggs || argv.reporters || argv.validators)) {
+    if (!(argv.name || (argv.elasticsearch || argv.query || argv.aggs) || (argv.cassandra || argv.cqlquery) || argv.reporters || argv.validators)) {
       log.error(yargs.help());
       process.exitCode = 11;
     } else {
-      try {
-        opts = {
-          name: argv.name,
-          elasticsearch: JSON.parse(argv.elasticsearch),
-          query: JSON.parse(argv.query),
-          aggs: argv.aggs ? JSON.parse(argv.aggs) : "",
-          validators: JSON.parse(argv.validators),
-          reporters: JSON.parse(argv.reporters)
-        };
-      } catch (error1) {
-        e = error1;
-        log.error("ERROR: failed parsing commandline options: " + e.message);
-        process.exitCode = 12;
+
+      if (argv.elasticsearch){
+	      try {
+	        opts = {
+	          name: argv.name,
+	          elasticsearch: JSON.parse(argv.elasticsearch),
+	          query: JSON.parse(argv.query),
+	          aggs: argv.aggs ? JSON.parse(argv.aggs) : "",
+	          validators: JSON.parse(argv.validators),
+	          reporters: JSON.parse(argv.reporters)
+	        };
+	      } catch (error1) {
+	        e = error1;
+	        log.error("ERROR: failed parsing elastic commandline options: " + e.message);
+	        process.exitCode = 12;
+	      }
+      } else if (argv.cassandra){
+	      try {
+	        opts = {
+	          name: argv.name,
+	          cassandra: argv.cassandra || "127.0.0.1",
+	          cqlquery: argv.cqlquery,
+	          params: argv.params || "",
+	          validators: JSON.parse(argv.validators),
+	          reporters: JSON.parse(argv.reporters)
+	        };
+	      } catch (error1) {
+	        e = error1;
+	        log.error("ERROR: failed parsing cql commandline options: " + e.message);
+	        process.exitCode = 12;
+	      }
       }
     }
   }

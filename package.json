@@ -21,8 +21,9 @@
     "url": "https://github.com/lmangani/elasticwatch-js"
   },
   "dependencies": {
-    "url": "*",
+    "cassandra-driver": "^3.3.0",
     "loglevel": "^1.2.0",
+    "url": "*",
     "yargs": "^3.4.5"
   },
   "devDependencies": {

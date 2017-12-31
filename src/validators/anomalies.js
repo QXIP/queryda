@@ -143,15 +143,16 @@
         return false;
       } else {
         this.fails = [];
-	if (data.hits.hits.length == 0) {
+	if (data.hits && data.hits.hits.length === 0 || data.length === 0) {
             log.debug("AnomaliesValidator.validate: no hits for query! ");
             return false;
         }
-        ref = data.hits.hits;
+	if (data.hits && data.hits.hits) { data = data.hits.hits; }
+        ref = data;
 	var series = {};
         for (i = 0, len = ref.length; i < len; i++) {
           hit = ref[i];
-          val = hit._source[this.fieldName];
+          val = hit[this.fieldName] || hit._source[this.fieldName];
 	  series[i] = val;
         }
 	var res = clustering.nearness(series);
@@ -167,7 +168,7 @@
             log.debug("AnomaliesValidator.validate: anomalies found in series!");
             return false;
           }
-
+	return;
       }
       return true;
     };
