@@ -2,17 +2,17 @@
   "name": "SimpleJob-5m",
   "info": "This job simply queries some values and compares them to a given min and max range",
   "cassandra": "127.0.0.1",
-  "cqlquery": "SELECT value from test.TEST",
+  "cqlquery": "SELECT LAST_MODIFIED_DATE,value from test.TEST",
   "params": "test",
   "validators": {
     "range" : {
-	    "fieldName": "rows",
+	    "fieldName": "value",
 	    "min": 0,
-	    "max": 500,
-	    "tolerance": 4
+	    "max": 600,
+	    "tolerance": 1
     },
     "anomalies" : {
-	    "fieldName": "renderTime",
+	    "fieldName": "value",
 	    "tolerance": 2
     }
   },

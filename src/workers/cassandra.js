@@ -140,7 +140,7 @@
       if (!data || typeof data === "undefined") {
         result = rc.InvalidResponse;
       } else {
-        log.debug("Worker(" + this.id + ").onResponse: cql query returned " + data);
+        log.debug("Worker(" + this.id + ").onResponse: cql query returned " + JSON.stringify(data) );
 
         if (data === '') {
           result = rc.NoResults;
@@ -200,16 +200,14 @@
      */
 
     Worker.prototype.onResponse = function(body) {
-       log.debug("Worker(" + this.id + ").onResponse: response was: ", body);
+       // log.debug("Worker(" + this.id + ").onResponse: response was: ", body);
          try {
-              data = JSON.parse(body);
-              return this.handleResponseData(data);
+              return this.handleResponseData(body.rows);
          } catch (error1) {
               e = error1;
-              log.error("Worker(" + this.id + ").onResponse: failed to parse response data");
+              log.error("Worker(" + this.id + ").onResponse: failed to parse response data",e);
 	      this.raiseAlarm("" + Worker.ResultCodes.NotFound.label);
 	      process.exitCode = Worker.ResultCodes.NotFound.code;
-	      this.request.end();
 	      return process.exit();
          }
     };
@@ -231,7 +229,7 @@
         this.raiseAlarm(Worker.ResultCodes.UnhandledError.label + ": " + error);
         process.exitCode = Worker.ResultCodes.UnhandledError.code;
       }
-      return this.request.end();
+      return;
     };
 
     return Worker;
