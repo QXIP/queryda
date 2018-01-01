@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "cassandra-driver": "^3.3.0",
+    "jexl": "^1.1.4",
     "loglevel": "^1.2.0",
     "url": "*",
     "yargs": "^3.4.5"

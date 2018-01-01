@@ -142,7 +142,7 @@
         result = rc.InvalidResponse;
       } else {
         log.debug("Worker(" + this.id + ").onResponse: cql query returned " + JSON.stringify(data) );
-
+	data = JSON.parse(JSON.stringify(data));
         if (data === '') {
           result = rc.NoResults;
 	  return false;
