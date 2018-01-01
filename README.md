@@ -182,7 +182,9 @@ There's plenty of work to be done in order to make this tool powerful - any help
 * [ ] Implement pseudo-cascading programming as in Kapacitor
 
 ## Credits and Acknowledgements
-Original Fork based on Elasticwatch-JS by QXIP, and Elasticwatch-[Coffeescript](https://github.com/ryx/elasticwatch) version by Rico Pfaus. All rights reserved by their respective owners.
+All rights reserved by their respective owners.
+
+Original Fork based on Elasticwatch-JS by QXIP, and its [Coffeescript](https://github.com/ryx/elasticwatch) parent.
 
 Apache Cassandra, Apache Lucene, Apache, Lucene, Solr, TinkerPop, and Cassandra are trademarks of the Apache Software Foundation or its subsidiaries in Canada, the United States and/or other countries.
 
