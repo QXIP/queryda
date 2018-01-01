@@ -26,15 +26,33 @@ Once created, execute queryda with the following commandline using the *cqlexamp
 ```
 bin/queryda --configfile="../jobs/cqlexample.json"
 ```
+### Custom Time-Range Function
+To allow simple time-range queries in Cassandra 3.x, the following custom Function can be used:
+```
+CREATE FUNCTION IF NOT EXISTS toTimestampLast(minutes int) 
+  CALLED ON NULL INPUT 
+  RETURNS timestamp
+  LANGUAGE java AS '
+    long now = System.currentTimeMillis();
+    if (minutes == null)
+      return new Date(now);
+    return new Date(now - (minutes.intValue() * 60 * 1000));
+  ';
+```
+Usage:
+```
+SELECT value FROM test.TEST WHERE LAST_MODIFIED_DATE >= toTimestampLast(60) AND LAST_MODIFIED_DATE <= toTimestamp(now()) LIMIT 100 ALLOW FILTERING;
+```
 
 #### Configuration
+The following examples illustrates a time-bound
 ```
 {
   "name": "SimpleJob-5m",
   "info": "This job simply queries some values and compares them to a given min and max range",
   "cassandra": "127.0.0.1",
-  "cqlquery": "SELECT LAST_MODIFIED_DATE,value from test.TEST",
-  "params": "test",
+  "cqlquery": "SELECT value FROM test.TEST WHERE LAST_MODIFIED_DATE >= '2018-01-01 00:01+0000' AND LAST_MODIFIED_DATE <= toTimestamp(now()) LIMIT 100 ALLOW FILTERING;",
+  "params": "null",
   "validators": {
     "range" : {
 	    "fieldName": "value",
