@@ -22,6 +22,18 @@ cd queryda
 npm install
 ```
 
+
+## Usage
+
+### Quick Examples
+##### Elasticsearch
+To see an Elasticsearch example, see [examples/elasticsearch](https://github.com/QXIP/queryda/blob/master/examples/elasticsearch.md)
+
+##### Cassandra
+To see a Cassandra example, see [examples/cassandra](https://github.com/QXIP/queryda/blob/master/examples/cassandra.md)
+
+---------
+
 ### Set Alert from Command-Line
 Let's run queryda with the following commandline (or using the *example.json* from the `jobs` dir). 
 ```
