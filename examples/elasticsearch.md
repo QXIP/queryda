@@ -13,9 +13,9 @@ curl -s -XPUT 'http://localhost:9200/monitoring/rum/5' -d '{"requestTime":48,"re
 curl -s -XPUT 'http://localhost:9200/monitoring/rum/6' -d '{"requestTime":43,"responseTime":256,"renderTime":531,"timestamp":"2015-03-06T13:02:34"}'
 ```
 ### Alert from Command-Line
-Once created, execute elasticwatch with the following commandline (or using the *example.json* from the `jobs` dir). 
+Once created, execute queryda with the following commandline (or using the *example.json* from the `jobs` dir). 
 ```
-bin/elasticwatch \
+bin/queryda \
 --elasticsearch='{"host":"localhost","port":9200,"index":"monitoring","type":"rum"}' \
 --query='{"range":{"timestamp":{"gt":"2015-03-06T12:00:00","lt":"2015-03-07T00:00:00"}}}' \
 --aggs='{}' \
@@ -24,7 +24,7 @@ bin/elasticwatch \
 ```
 
 ### Alert from Config
-elasticwatch-js can also be executed using a self-contained configuration file (see [example.json](jobs/example.json))
+queryda can also be executed using a self-contained configuration file (see [example.json](jobs/example.json))
 ```
-bin/elasticwatch --configfile /path/to/watcherjob.json
+bin/queryda --configfile /path/to/watcherjob.json
 ```

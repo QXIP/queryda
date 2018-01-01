@@ -1,6 +1,6 @@
 {
-  "name": "elasticwatch",
-  "version": "0.0.8",
+  "name": "queryda",
+  "version": "1.0.8",
   "description": "watch/report/alert tool for elasticsearch",
   "author": "Lorenzo Mangani <lorenzo.mangani@gmail.com>",
   "keywords": [
@@ -14,11 +14,11 @@
     "notification"
   ],
   "bin": {
-    "elasticwatch": "./bin/elasticwatch"
+    "queryda": "./bin/queryda"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/lmangani/elasticwatch-js"
+    "url": "https://github.com/lmangani/queryda"
   },
   "dependencies": {
     "cassandra-driver": "^3.3.0",

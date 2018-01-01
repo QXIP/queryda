@@ -67,7 +67,7 @@
 
     MailReporter.prototype.notify = function(message, data) {
       log.debug("MailReporter.notify: '" + data.name + "' raised alarm: " + message);
-      return this.sendMail(this.config.targetAddress, "[elasticwatch] " + data.name + " raised alarm", "Hi buddy, \n\nalarm message was: " + message + "\n\nCheers,\nyour elasticwatch", function() {}, (function(_this) {
+      return this.sendMail(this.config.targetAddress, "[queryda] " + data.name + " raised alarm", "Hi buddy, \n\nalarm message was: " + message + "\n\nCheers,\nyour Queryda", function() {}, (function(_this) {
         return function(error) {
           log.error("ERROR: mail delivery failed: " + error);
           if (_this.retryAttempt < _this.maxRetries) {
