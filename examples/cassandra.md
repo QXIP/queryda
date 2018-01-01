@@ -21,19 +21,30 @@ cqlsh -e "INSERT INTO test.TEST (ID, NAME, value, LAST_MODIFIED_DATE) VALUES ('6
 cqlsh -e "INSERT INTO test.TEST (ID, NAME, value, LAST_MODIFIED_DATE) VALUES ('7', 'elephant',  '590', toTimestamp(now()));" --cqlversion="3.4.4" && sleep 1;
 ```
 
-### Alert from Command-Line
-Once created, execute queryda with the following commandline (or using the *example.json* from the `jobs` dir). 
+### Alert from Command-Line + Config File
+Once created, execute queryda with the following commandline using the *cqlexample.json* from the `jobs` dir. 
 ```
-bin/queryda \
---cassadra='{"host":"127.0.0.1"}' \
---query='SELECT val FROM examples.series WHERE id = ?' \
---params='test' \
---validators='{"range":{"fieldName":"renderTime","min":0,"max":500,"tolerance":4}}' \
---reporters='{"console":{}}' --debug --name test
+bin/queryda --configfile="../jobs/cqlexample.json"
 ```
 
-### Alert from Config
-queryda can also be executed using a self-contained configuration file (see [example.json](jobs/example.json))
+#### Configuration
 ```
-bin/queryda --configfile /path/to/watcherjob.json
+{
+  "name": "SimpleJob-5m",
+  "info": "This job simply queries some values and compares them to a given min and max range",
+  "cassandra": "127.0.0.1",
+  "cqlquery": "SELECT LAST_MODIFIED_DATE,value from test.TEST",
+  "params": "test",
+  "validators": {
+    "range" : {
+	    "fieldName": "value",
+	    "min": 0,
+	    "max": 600,
+	    "tolerance": 1
+    }
+  },
+  "reporters": {
+    "console": {}
+  }
+}
 ```
