@@ -156,6 +156,28 @@ The MailReporter sends an email to one (or multiple) given e-mail address(es). I
 ### Custom reporters
 You can create custom reporters by creating a new class that extends the `Reporter` class (see [ConsoleReporter](src/reporters/console.js) for an example).
 
-## Credits
-Original Fork based on [Coffeescript](https://github.com/ryx/elasticwatch) version by Rico Pfaus. All rights reserved by the respective owners.
+## TODO
+There's plenty of work to be done in order to make this tool powerful - any help and contribution is appreciated!
+
+* [ ] Cleanup, Revamp output for usefulness.
+* [ ] Port transform, validate, actions from SENTINL
+* [ ] Properly modularize input Workers
+* [x] Implement Cassandra Support
+* [ ] Implement Clickhouse Support
+* [ ] Implement InfluxDB Support
+* [ ] Implement GunDB Support
+  * [ ] Integrate SENTINL Clustering
+* [ ] Implement pseudo-cascading programming as in Kapacitor
+
+## Credits and Acknowledgements
+Original Fork based on Elasticwatch-JS by QXIP, and Elasticwatch-[Coffeescript](https://github.com/ryx/elasticwatch) version by Rico Pfaus. All rights reserved by their respective owners.
+
+Apache Cassandra, Apache Lucene, Apache, Lucene, Solr, TinkerPop, and Cassandra are trademarks of the Apache Software Foundation or its subsidiaries in Canada, the United States and/or other countries.
+
+Elasticsearch and Kibana are trademarks of Elasticsearch BV, registered in the U.S. and in other countries.
+
+Elassandra is a trademark of Strapdata SAS.
+
+Sentinl is a trademark of QXIP BV and Siren Solutions.
+
 
