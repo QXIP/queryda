@@ -69,16 +69,15 @@
           val = hit[this.fieldName] || hit._source[this.fieldName];
           log.debug("RangeValidator.validate: val " + val);
           if ((this.max && val > this.max) || (this.min && val < this.min)) {
-            log.debug("RangeValidator.validate: exceeds range");
+            log.debug("RangeValidator.validate: "+val+" exceeds range");
             this.fails.push(val);
-          } else {
-            this.fails.length = 0;
           }
           if (this.fails.length > this.tolerance) {
             log.debug("RangeValidator.validate: more than " + this.tolerance + " consecutive fails occured");
             return false;
           }
         }
+	return;
       }
       return true;
     };

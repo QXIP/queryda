@@ -66,7 +66,7 @@
 	          name: argv.name,
 	          elasticsearch: JSON.parse(argv.elasticsearch),
 	          query: JSON.parse(argv.query),
-	          aggs: argv.aggs ? JSON.parse(argv.aggs) : "",
+	          aggs: JSON.parse(argv.aggs),
 	          validators: JSON.parse(argv.validators),
 	          reporters: JSON.parse(argv.reporters)
 	        };

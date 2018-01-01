@@ -1,6 +1,6 @@
 {
   "name": "elasticwatch",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "watch/report/alert tool for elasticsearch",
   "author": "Lorenzo Mangani <lorenzo.mangani@gmail.com>",
   "keywords": [
@@ -36,6 +36,8 @@
   },
   "license": "MIT",
   "scripts": {
-    "test": "./test.sh"
+    "test": "./test_elastic.sh && test_cassandra.sh"
+    "test_elastic": "./test_elastic.sh"
+    "test_cassandra": "./test_cassandra.sh"
   }
 }

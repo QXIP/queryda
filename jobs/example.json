@@ -8,22 +8,12 @@
     "type": "rum"
   },
   "query": {
-    "filtered": {
-      "query": {
-        "query_string": {
-          "query": "_exists_:renderTime",
-          "analyze_wildcard": true
-        }
-      },
-      "filter": {
-        "range" : {
-          "@timestamp" : {
-            "gt" : "now-5m",
-            "lt" : "now"
-          }
-        }
+      "range": {
+            "timestamp": {
+              "gte": "2017-01-06T12:00:00",
+              "lte": "2017-12-07T00:00:00"
+            }
       }
-    }
   },
   "aggs": {},
   "validators": {
@@ -31,7 +21,7 @@
 	    "fieldName": "renderTime",
 	    "min": 0,
 	    "max": 500,
-	    "tolerance": 4
+	    "tolerance": 1
     },
     "anomalies" : {
 	    "fieldName": "renderTime",

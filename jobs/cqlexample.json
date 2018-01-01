@@ -10,10 +10,6 @@
 	    "min": 0,
 	    "max": 600,
 	    "tolerance": 1
-    },
-    "anomalies": {
-	    "fieldName": "value",
-	    "tolerance": 0
     }
   },
   "reporters": {

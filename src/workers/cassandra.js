@@ -108,10 +108,11 @@
   	}.bind(this))
 	.then(function(data){
 		this.onResponse(data);
-		return true;
+		return client.shutdown();
 	}.bind(this))
 	.catch(function(err){
 	        return log.error("Worker(" + this.id + ").start: unhandled error: " + err);
+		return client.shutdown();
 	}.bind(this));
 	return true;
 
