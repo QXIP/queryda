@@ -1,9 +1,9 @@
 # queryda 
 
-<img width=200 src="https://user-images.githubusercontent.com/1423657/34464911-076e9432-ee96-11e7-8c0c-0d893eef2429.png"/>
+<img width=150 src="https://user-images.githubusercontent.com/1423657/34464911-076e9432-ee96-11e7-8c0c-0d893eef2429.png"/>
 
 
-Queryda loves your data as much as you do! Designed for lightweight, intelligent alarming, queryda will execute and "watch" Elasticsearch and Cassandra queries via ```workers```, comparing their results to one or more given expectations via a pipeline of ```validators```. When query results does not match the expectations, a ```reporter``` is notified and can perform any kind of action _(e.g. heat up the coffeemaker via IFTTT before sending an email to your dev team)_.
+**Queryda** loves your data as much as you do! Designed for lightweight, intelligent alarming, it will execute and _"watch"_ **Elasticsearch** and **Cassandra** queries via ```workers```, comparing their results to one or more given expectations via a pipeline of ```validators```. When query results does not match the expectations, a ```reporter``` is notified and can perform any kind of action _(e.g. heat up the coffeemaker via IFTTT before sending an email to your dev team)_.
 
 For a natively ELK/Elassandra UI integrated and advanced alerting plarform, check out our Kibana App [SENTINL](https://github.com/sirensolutions/sentinl)
 
@@ -15,14 +15,14 @@ Install globally using npm
 npm install -g queryda
 ```
 #### Manual
-or clone the git repository and install the dependencies.
+or clone the git repository and install the dependencies locally
 ```
 git clone https://github.com/lmangani/queryda.git
 cd queryda
 npm install
 ```
 
-### Alert from Command-Line
+### Set Alert from Command-Line
 Let's run queryda with the following commandline (or using the *example.json* from the `jobs` dir). 
 ```
 bin/queryda \
@@ -33,14 +33,14 @@ bin/queryda \
 --reporters='{"console":{}}' --debug --name test
 ```
 
-### Alert from Config
+### Set Alert from Config
 queryda can also be executed using a self-contained configuration file (see [example.json](jobs/example.json))
 ```
 bin/queryda --configfile /path/to/watcherjob.json
 ```
 
 ## Configuration
-queryda can be configured either via commandline or using a JSON file (supplied via `--configfile` parameter). Both ways require to specify option groups with individual settings (e.g. for elasticsearch, for the reporters, for the validator, ..). An example JSON file can be found in the `jobs`dir.
+queryda can be configured either via commandline or using a JSON file _(suggested method via `--configfile` parameter)_. Both ways require to specify option groups with individual settings (e.g. for elasticsearch, for the reporters, for the validator, ..). A set of example JSON files for Cassandra and Elasticsearch can be found in the `jobs`dir.
 
 The following options are currently available:
 
