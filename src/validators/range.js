@@ -71,7 +71,7 @@
           if ((this.max && val > this.max) || (this.min && val < this.min)) {
             log.debug("RangeValidator.validate: "+val+" exceeds range");
             this.fails.push(val);
-          }
+	  }
           if (this.fails.length > this.tolerance) {
             log.debug("RangeValidator.validate: more than " + this.tolerance + " consecutive fails occured");
             return false;
@@ -92,7 +92,7 @@
      */
 
     RangeValidator.prototype.getMessage = function() {
-      return "'" + this.fieldName + "' outside range '" + this.min + "-" + this.max + "' for '" + (this.tolerance + 1) + "' consecutive times: '" + (this.fails.join(',')) + "'";
+      return "'" + this.fieldName + "' outside range '" + this.min + "-" + this.max + "' for '" + (this.fails.length) + "' consecutive times: '" + (this.fails.join(',')) + "'";
     };
 
     return RangeValidator;

@@ -55,11 +55,12 @@
         return false;
       } else {
         this.fails = [];
-	if (data.hits.hits.length == 0) {
+	if (data.hits && data.hits.hits.length == 0||!data) {
             log.debug("DropeakValidator.validate: no hits for query! ");
             return false;
         }
-        ref = data.hits.hits;
+	if (data.hits && data.hits.hits) { data = data.hits.hits; }
+        ref = data;
         for (i = 1, len = ref.length-1; i < len; i++) {
           val = ref[i]._source[this.fieldName];
           pre = ref[i-1]._source[this.fieldName];
@@ -93,7 +94,7 @@
      */
 
     DropeakValidator.prototype.getMessage = function() {
-      return "'" + this.fieldName + "' peaks/drops detected '" + (this.tolerance + 1) + "' consecutive times: '" + (this.fails.join(',')) + "'";
+      return "'" + this.fieldName + "' peaks/drops detected '" + (this.fails.length) + "' consecutive times: '" + (this.fails.join(',')) + "'";
     };
 
     return DropeakValidator;
