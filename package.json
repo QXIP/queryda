@@ -36,8 +36,8 @@
   },
   "license": "MIT",
   "scripts": {
-    "test": "./test_elastic.sh && test_cassandra.sh"
-    "test_elastic": "./test_elastic.sh"
+    "test": "./test_elastic.sh && test_cassandra.sh",
+    "test_elastic": "./test_elastic.sh",
     "test_cassandra": "./test_cassandra.sh"
   }
 }
