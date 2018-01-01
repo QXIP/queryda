@@ -14,4 +14,4 @@ cqlsh -e "INSERT INTO test.TEST (ID, NAME, value, LAST_MODIFIED_DATE) VALUES ('6
 sleep 1;
 cqlsh -e "INSERT INTO test.TEST (ID, NAME, value, LAST_MODIFIED_DATE) VALUES ('7', 'elephant',  '590', toTimestamp(now()));" --cqlversion="3.4.4"
 
-bin/elasticwatch --configfile="../jobs/cqlexample.json"
+bin/queryda --configfile="../jobs/cqlexample.json"
