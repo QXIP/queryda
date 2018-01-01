@@ -26,6 +26,10 @@ Once created, execute queryda with the following commandline using the *cqlexamp
 ```
 bin/queryda --configfile="../jobs/cqlexample.json"
 ```
+###### Output
+```
+ConsoleReporter.notify: 'SimpleJob-5m' raised alarm: ALARM_VALIDATION_FAILED: 'value' outside range '0-600' for '1' consecutive times: '999'
+```
 
 #### Example Configuration
 The following examples illustrates a time-bound
